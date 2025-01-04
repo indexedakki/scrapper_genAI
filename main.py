@@ -16,7 +16,6 @@ from pinecone import ServerlessSpec
 import time
 from langchain.text_splitter import CharacterTextSplitter
 import transformers
-import torch
 from dotenv import find_dotenv, load_dotenv
 from transformers import pipeline
 import requests
@@ -37,7 +36,6 @@ import hashlib
 from fastapi.security import OAuth2PasswordBearer
 from typing import Optional
 from datetime import datetime, timedelta
-import jwt
 from passlib.context import CryptContext
 
 app = FastAPI()
