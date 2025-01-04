@@ -42,7 +42,6 @@ jiter==0.8.2
 joblib==1.4.2
 jsonpatch==1.33
 jsonpointer==3.0.0
-keras==3.7.0
 langchain==0.3.13
 langchain-community==0.3.13
 langchain-core==0.3.28
@@ -85,7 +84,6 @@ pydantic==2.10.4
 pydantic-settings==2.7.1
 pydantic_core==2.27.2
 Pygments==2.18.0
-PyJWT==2.3.0
 pypika-tortoise==0.3.2
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
@@ -112,15 +110,10 @@ SQLAlchemy==2.0.36
 starlette==0.41.3
 sympy==1.13.1
 tenacity==9.0.0
-tensorboard==2.18.0
-tensorboard-data-server==0.7.2
 termcolor==2.5.0
-tf_keras==2.18.0
 tiktoken==0.8.0
 tokenizers==0.21.0
 toml==0.10.2
-torch==2.5.1
-torchvision==0.20.1
 tortoise-orm==0.23.0
 tqdm==4.67.1
 transformers==4.47.1
