@@ -8,4 +8,8 @@ pinecone[grpc]==5.4.2
 langchain==0.3.14
 transformers==4.47.1
 langchain-openai==0.2.14
+<<<<<<< HEAD
 passlib==1.7.4
+=======
+passlib==1.7.4
+>>>>>>> 8bfb76621dc3cc0a64cf32ecbc6fbd18181de34c
