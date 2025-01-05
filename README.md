@@ -24,7 +24,6 @@ LinkLlama is an AI-powered web application that helps you generate insightful qu
 
 - Node.js (version 14 or higher)
 - Python (version 3.7 or higher)
-- Docker (for Pinecone integration)
 
 ### Installation
 1. Clone this repository:
