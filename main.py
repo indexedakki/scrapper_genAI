@@ -6,6 +6,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.service import Service
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import re
@@ -205,11 +207,15 @@ def extract_important_tags(html_content):
 @app.post("/scrape")
 async def scrape_website(request: ScrapeRequest):
     try:
-        options = webdriver.ChromeOptions()
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-gpu')
-        driver = webdriver.Chrome()
+        options = FirefoxOptions()
+        driver = webdriver.Firefox(options=options)
+
+        # options = webdriver.ChromeOptions()
+        # options.add_argument('--no-sandbox')
+        # options.add_argument('--disable-dev-shm-usage')
+        # options.add_argument('--disable-gpu')
+        # options.add_argument('headless')
+        # driver = webdriver.Chrome(service=service, timeout=120)
         
         driver.get(request.url)
 
