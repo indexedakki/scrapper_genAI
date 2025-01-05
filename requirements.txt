@@ -9,4 +9,8 @@ langchain==0.3.14
 transformers==4.47.1
 langchain-openai==0.2.14
 passlib==1.7.4
+<<<<<<< HEAD
 gunicorn==23.0.0
+=======
+gunicorn==23.0.0
+>>>>>>> f66328ee38bb0aee46518941cd14f95459204fa6
