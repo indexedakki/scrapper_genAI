@@ -206,92 +206,92 @@ def extract_important_tags(html_content):
 
 @app.post("/scrape")
 async def scrape_website(request: ScrapeRequest):
+    # try:
+
+    options = FirefoxOptions()
+    driver = webdriver.Firefox(options=options)
+
+    # options = webdriver.ChromeOptions()
+    # options.add_argument('--no-sandbox')
+    # options.add_argument('--disable-dev-shm-usage')
+    # options.add_argument('--disable-gpu')
+    # options.add_argument('headless')
+    # driver = webdriver.Chrome(service=service, timeout=120)
+
+    driver.get(request.url)
+
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
+    page_source = driver.page_source
+
+    driver.quit()
+
+    extracted_data = extract_important_tags(page_source)
+
+    data = ScrapeResponse(
+        headings=extracted_data['headings'],
+        paragraphs=extracted_data['paragraphs'],
+        text_summary=extracted_data['text_summary']
+    )
+    data_dict = data.dict()
+
+    # Removing previous vectors for newer article
     try:
-
-        options = FirefoxOptions()
-        driver = webdriver.Firefox(options=options)
-
-        # options = webdriver.ChromeOptions()
-        # options.add_argument('--no-sandbox')
-        # options.add_argument('--disable-dev-shm-usage')
-        # options.add_argument('--disable-gpu')
-        # options.add_argument('headless')
-        # driver = webdriver.Chrome(service=service, timeout=120)
-        
-        driver.get(request.url)
-
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        
-        page_source = driver.page_source
-        
-        driver.quit()
-
-        extracted_data = extract_important_tags(page_source)
-        
-        data = ScrapeResponse(
-            headings=extracted_data['headings'],
-            paragraphs=extracted_data['paragraphs'],
-            text_summary=extracted_data['text_summary']
-        )
-        data_dict = data.dict()
-
-        # Removing previous vectors for newer article
-        try:
-            index = pc.Index("website-scrapper")
-            index.delete(delete_all=True, namespace='example-namespace')
-        except Exception as e:
-            pass
-
-        # data_dict = app.state.data_dict
-        large_paragraph = str(data_dict)
-
-        text_splitter = CharacterTextSplitter(
-            separator = ".",
-            chunk_size= 200,
-            chunk_overlap = 20,
-            length_function = len
-        )
-        data_split = text_splitter.split_text(large_paragraph)
-
-        output_data = []
-
-        for idx, item in enumerate(data_split, start=1):
-            output_data.append({
-                "id": f"vec{idx}",
-                "text": item
-            })
-
-        # print(output_data)
-        # Convert the text into numerical vectors that Pinecone can index
-        embeddings = pc.inference.embed(
-            model="multilingual-e5-large",
-            inputs=[d['text'] for d in output_data],
-            parameters={"input_type": "passage", "truncate": "END"}
-        )
-        # print(embeddings)
-
-        # Target the index where you'll store the vector embeddings
         index = pc.Index("website-scrapper")
-        # Prepare the records for upsert
-        # Each contains an 'id', the embedding 'values', and the original text as 'metadata'
-        records = []
-        for d, e in zip(output_data, embeddings):
-            records.append({
-                "id": d['id'],
-                "values": e['values'],
-                "metadata": {'text': d['text']}
-            })
-
-        # Upsert the records into the index
-        index.upsert(
-            vectors=records,
-            namespace="example-namespace"
-        )
-
-        return {"status": "Scraping completed", "data_dict": data_dict}
-
+        index.delete(delete_all=True, namespace='example-namespace')
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        pass
+
+    # data_dict = app.state.data_dict
+    large_paragraph = str(data_dict)
+
+    text_splitter = CharacterTextSplitter(
+        separator = ".",
+        chunk_size= 200,
+        chunk_overlap = 20,
+        length_function = len
+    )
+    data_split = text_splitter.split_text(large_paragraph)
+
+    output_data = []
+
+    for idx, item in enumerate(data_split, start=1):
+        output_data.append({
+            "id": f"vec{idx}",
+            "text": item
+        })
+
+    # print(output_data)
+    # Convert the text into numerical vectors that Pinecone can index
+    embeddings = pc.inference.embed(
+        model="multilingual-e5-large",
+        inputs=[d['text'] for d in output_data],
+        parameters={"input_type": "passage", "truncate": "END"}
+    )
+    # print(embeddings)
+
+    # Target the index where you'll store the vector embeddings
+    index = pc.Index("website-scrapper")
+    # Prepare the records for upsert
+    # Each contains an 'id', the embedding 'values', and the original text as 'metadata'
+    records = []
+    for d, e in zip(output_data, embeddings):
+        records.append({
+            "id": d['id'],
+            "values": e['values'],
+            "metadata": {'text': d['text']}
+        })
+
+    # Upsert the records into the index
+    index.upsert(
+        vectors=records,
+        namespace="example-namespace"
+    )
+
+    return {"status": "Scraping completed", "data_dict": data_dict}
+
+    # except Exception as e:
+    #     raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/answer")
 async def answer_question(request: Question):
