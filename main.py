@@ -205,6 +205,10 @@ def extract_important_tags(html_content):
 @app.post("/scrape")
 async def scrape_website(request: ScrapeRequest):
     try:
+        options = webdriver.ChromeOptions()
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
         driver = webdriver.Chrome()
         
         driver.get(request.url)
