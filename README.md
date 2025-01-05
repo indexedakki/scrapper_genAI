@@ -1,6 +1,6 @@
 # LinkScrapper
 
-LinkLlama is an AI-powered web application that helps you generate insightful questions about any webpage. It combines the power of Mixtral models from Hugging Face with Pinecone's vector database for efficient storage and retrieval of word embeddings.
+LinkScrapper is an AI-powered web application that helps you generate insightful questions about any webpage. It combines the power of Mixtral models from Hugging Face with Pinecone's vector database for efficient storage and retrieval of word embeddings.
 
 ## Features
 
