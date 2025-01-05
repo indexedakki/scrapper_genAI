@@ -34,13 +34,24 @@ git clone https://github.com/indexedakki/scrapper_UI.git
 ```
 2. Install dependancies:
 ```bash
-   cd scrapper_genAI
-   pip install -r requirements.txt
-   cd scrapper_UI
-   npm install
-  ```
+cd scrapper_genAI
+pip install -r requirements.txt
+cd scrapper_UI
+npm install
+```
 3. Run React and fastapi
-   ```bash
-   uvicorn main:app --reload
-   npm start
-  ```
+```bash
+uvicorn main:app --reload
+npm start
+```
+## Usage
+
+1. Sign up for an account
+2. Log in to your account
+3. Paste a URL in the input field
+4. The page source will be scraped in the background
+5. Ask specific questions relevant to the webpage content
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
