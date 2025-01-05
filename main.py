@@ -174,13 +174,7 @@ class ScrapeResponse(BaseModel):
     paragraphs: list[str] = []
     text_summary: str = ""
     
-def extract_important_tags(html_content):
-    soup = BeautifulSoup(html_content, 'html.parser')
-    
-    # Remove all script and style elements
-    for script in soup(["script", "style"]):
-        script.decompose()
-    
+def extract_important_tags(soup):
     # Get text
     text = soup.get_text()
     
@@ -196,7 +190,7 @@ def extract_important_tags(html_content):
     # Extract important tags
     headings = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
     paragraphs = soup.find_all('p')
-    
+
     return {
         'headings': [h.text.strip() for h in headings],
         'paragraphs': [p.text.strip() for p in paragraphs],
@@ -208,8 +202,8 @@ def extract_important_tags(html_content):
 async def scrape_website(request: ScrapeRequest):
     # try:
 
-    options = FirefoxOptions()
-    driver = webdriver.Firefox(options=options)
+    # options = FirefoxOptions()
+    # driver = webdriver.Firefox(options=options)
 
     # options = webdriver.ChromeOptions()
     # options.add_argument('--no-sandbox')
@@ -217,16 +211,17 @@ async def scrape_website(request: ScrapeRequest):
     # options.add_argument('--disable-gpu')
     # options.add_argument('headless')
     # driver = webdriver.Chrome(service=service, timeout=120)
+    # driver.get(request.url)
 
-    driver.get(request.url)
+    # WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+    # page_source = driver.page_source
+    # driver.quit()
 
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+    url = request.url
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
 
-    page_source = driver.page_source
-
-    driver.quit()
-
-    extracted_data = extract_important_tags(page_source)
+    extracted_data = extract_important_tags(soup)
 
     data = ScrapeResponse(
         headings=extracted_data['headings'],
